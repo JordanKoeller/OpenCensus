@@ -1,0 +1,13 @@
+# Libreoffice lock files
+.~lock*
+
+# vscode
+.vscode
+
+# Python
+*.pyc
+
+__pycache__/
+
+# Vim swap files
+*.swp
