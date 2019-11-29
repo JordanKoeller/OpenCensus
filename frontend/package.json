@@ -1,0 +1,48 @@
+{
+  "name": "OpenJustice",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@nivo/bar": "^0.51.0",
+    "@types/jest": "^24.0.23",
+    "@types/node": "12.12.9",
+    "@types/react": "16.9.11",
+    "@types/react-bootstrap": "^0.32.20",
+    "@types/react-dom": "^16.9.4",
+    "@types/react-router-dom": "^5.1.2",
+    "@types/request-promise-native": "^1.0.15",
+    "ajv": "^6.5.5",
+    "bootstrap": "^4.3.1",
+    "react": "^16.12.0",
+    "react-bootstrap": "^1.0.0-beta.16",
+    "react-data-fetching": "^1.0.0-beta.1",
+    "react-dom": "^16.12.0",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "3.2.0",
+    "react-sortable-hoc": "^0.8.3",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.5",
+    "typescript": "3.7.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
