@@ -1,0 +1,33 @@
+name: Deploy-Static-Frontend
+
+on:
+  push:
+    branches: 
+      - master
+    paths:
+      - 'frontend/*'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Build
+        uses: actions/setup-node@v1
+        with:
+          node-version: '11.x'
+      - run: |
+          echo Running npm commands
+          cd ./frontend
+          npm install
+          npm run-script build
+          echo Finished running npm commands
+      - uses: awact/s3-action@master
+        env:
+          SOURCE_DIR: './frontend/build'
+          AWS_REGION: 'us-east-1'
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCEKT }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  
