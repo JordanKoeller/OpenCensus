@@ -184,7 +184,7 @@ def titleIds(id):
 
 if __name__ == '__main__':
     resourceDir = '../resources/colonial-1970-migration'
-    for i in range(20,24, 1):
+    for i in range(22,23, 1):
         srcName = '%s/chart%d/apiResponse.json' % (resourceDir, i)
         imgName = '%s/chart%d/chart%d.pdf' % (resourceDir, i, i)
         destName = '%s/chart%d/table%d.csv' % (resourceDir, i, i)

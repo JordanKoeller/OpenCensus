@@ -1,0 +1,59 @@
+# Welcome to Serverless!
+#
+# This file is the main config file for your service.
+# It's very minimal at this point and uses default values.
+# You can always add more config options for more control.
+# We've included some commented out config examples here.
+# Just uncomment any of them to get that config option.
+#
+# For full config options, check the docs:
+#    docs.serverless.com
+#
+# Happy Coding!
+
+service: canyoumigrate
+frameworkVersion: "=1.59.3"
+
+plugins:
+  - serverless-python-requirements
+
+custom:
+  pythonRequirements:
+    dockerizePip: non-linux
+    # noDeploy:
+    #   - Cython
+    #   - boto3
+    #   - docutils
+    #   - jmespath
+    #   - python-dateutil
+    #   - s3transfer
+    #   - six
+    #   - urllib3
+    zip: true
+  # censusBucket:
+  #   Ref: CensusBucket
+
+# package:
+#   individually: false
+  # exclude:
+  #   - "./build/**"
+  #   - "./node_modules/**"
+  #   - "./venv/**"
+
+provider:
+  name: aws
+  runtime: python3.7
+  environment:
+    CENSUS_BUCKET: "open-justice-resources" #${self:custom.censusBucket}
+    CENSUS_OBJECT: "aggregatedSheet.csv" #${self:custom.censusBucket}
+
+functions:
+  hello:
+    handler: main.main
+    events:
+      - http:
+          path: can-you-migrate
+          method: post
+      - http:
+          path: get-country-headers
+          method: get

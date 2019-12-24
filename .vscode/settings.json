@@ -1,3 +1,12 @@
 {
-    "python.pythonPath": "/home/jordan/Tools/Miniconda3/envs/imm/bin/python"
+    "python.pythonPath": "/home/linuxbrew/.linuxbrew/bin/python3",
+    "files.associations": {
+        "*.cloudformation": "yaml",
+        "array": "c",
+        "istream": "c",
+        "ostream": "c",
+        "tuple": "c",
+        "type_traits": "c",
+        "utility": "c"
+    }
 }

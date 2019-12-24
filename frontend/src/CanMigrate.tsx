@@ -14,7 +14,7 @@ type CanMigrateFormProps = {
     defaultYear?: number,
 }
 
-const CanMigrateForm: React.FC<CanMigrateFormProps> = (props) => {
+const CanMigrateForm: React.FC<CanMigrateFormProps> = (props: CanMigrateFormProps) => {
     const availOpts = props.options;
     var coo: string = props.defaultCoo ? props.options[props.defaultCoo] : "";
     var yr: number = props.defaultYear ? props.defaultYear : 1970;
@@ -43,11 +43,13 @@ const CanMigrateForm: React.FC<CanMigrateFormProps> = (props) => {
 }
 
 const CanMigrateAppPage: React.FC = () => {
+    type AlertType = 'success' | 'danger' | 'warning';
     type StateType = {
         year: number,
         countryOfOrigin: string,
         canMoveMsg?: string
-        alertType?: 'success' | 'danger' | 'warning'
+        alertType?: AlertType,
+        countryOptions?: string[]
     };
     const [state, setState] = useState<StateType>({ year: 1970, countryOfOrigin: "" });
     const headerDiv = <div>
@@ -87,34 +89,85 @@ const CanMigrateAppPage: React.FC = () => {
         </p>
 
     </div>
-    const cooOpts = ["England", "Ireland", "Russia", "India", "China", "Japan", "Morocco"];
-    const computeCanCome = (year: number, countryOfOrigin: string) => {
-        const canMoveMsg = "Welcome to America!";
-        const alertType = "success";
-        setState({
-            'year': year,
-            'countryOfOrigin': countryOfOrigin,
-            'canMoveMsg': canMoveMsg,
-            'alertType': alertType
+    if (state.countryOptions === undefined) {
+        const url = 'https://qqifi2u8bd.execute-api.us-east-1.amazonaws.com/dev' + '/get-country-headers';
+        const countryRequest: Promise<Response> = fetch(url, {
+            headers: { 'Content-Type': 'text/plain' },
+            method: 'GET'
         });
-        console.log("Somebody came from " + countryOfOrigin + " in the year " + year.toString());
-    }
-    return <Container>
-        <Row>
-            {headerDiv}
-        </Row>
-        <Row>
-            <h2>
-                Could your family have moved to America?
+        countryRequest.then((e:Response) => e.json()).then((e: {countries: string[]}) => {
+            setState({...state, countryOptions: e.countries});
+        });
+
+        return <Container>
+            <Row>
+                {headerDiv}
+            </Row>
+            <Row>
+                <h2>
+                    Could your family have moved to America?
             </h2>
-        </Row>
-        <Row>
-            <CanMigrateForm options={cooOpts} onSubmit={computeCanCome} />
-        </Row>
-        <Row>
-            {state.canMoveMsg ? <Alert variant={state.alertType}>{state.canMoveMsg}</Alert> : ""}
-        </Row>
-    </Container>
+            </Row>
+            <Row>
+                <h3>Loading App...</h3>
+            </Row>
+            <Row>
+                {state.canMoveMsg ? <Alert variant={state.alertType}>{state.canMoveMsg}</Alert> : ""}
+            </Row>
+        </Container>
+    } else {
+        const computeCanCome = (year: number, countryOfOrigin: string) => {
+            const url = 'https://qqifi2u8bd.execute-api.us-east-1.amazonaws.com/dev' + '/can-you-migrate';
+            const waitRequest: Promise<Response> = fetch(url, {
+                headers: { 'Content-Type': 'text/plain' },
+                method: 'POST',
+                body: JSON.stringify({'country': countryOfOrigin, 'year': year})
+            });
+            waitRequest.then((e: Response) => e.json()).then((js: {waitMin: number, waitMax: number}) => {
+                let canMoveMsg = "Welcome to America!";
+                let alertType = "success";
+                if (js.waitMax < 2) {
+                    canMoveMsg = `Welcome to America! You should be able to move in
+                        ${js.waitMin} to ${js.waitMax} years.`;
+                    alertType = 'success';
+                } else if (js.waitMax < 10) {
+                    canMoveMsg = `You qualify for citizenship, but too many people from
+                        ${countryOfOrigin} have been applying to move to America recently.
+                        You should expect to wait from ${js.waitMin} to ${js.waitMax} to
+                        live in the US.`;
+                    alertType = 'warning';
+                } else {
+                    canMoveMsg = `I'm sorry, America is full. You might be able to move in about ${js.waitMax}
+                        years but we are not accepting any more citizens from ${countryOfOrigin} at this time.`
+                    alertType = 'danger';
+                }
+                setState({
+                    ...state,
+                    'year': year,
+                    'countryOfOrigin': countryOfOrigin,
+                    'canMoveMsg': canMoveMsg,
+                    'alertType': alertType as AlertType
+                });
+            });
+            console.log("Somebody came from " + countryOfOrigin + " in the year " + year.toString());
+        }
+        return <Container>
+            <Row>
+                {headerDiv}
+            </Row>
+            <Row>
+                <h2>
+                    Could your family have moved to America?
+            </h2>
+            </Row>
+            <Row>
+                <CanMigrateForm options={state.countryOptions!} onSubmit={computeCanCome} />
+            </Row>
+            <Row>
+                {state.canMoveMsg ? <Alert variant={state.alertType}>{state.canMoveMsg}</Alert> : ""}
+            </Row>
+        </Container>
+    }
 }
 
 export default CanMigrateAppPage;
