@@ -14,13 +14,13 @@ jobs:
       with:
         node-version: '11.x'
     - run: |
-        cd lambdas
         npm install serverless@1.59.3
+        cd lambdas
         for directory in $(ls -1)
         do
         cd $directory
         npm install
-        ../node_modules/serverless/bin/serverless.js deploy
+        ../../node_modules/serverless/bin/serverless.js deploy
         cd ..
         done
       env:
