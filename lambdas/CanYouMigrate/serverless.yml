@@ -12,7 +12,6 @@
 # Happy Coding!
 
 service: canyoumigrate
-frameworkVersion: "=1.59.3"
 
 plugins:
   - serverless-python-requirements
