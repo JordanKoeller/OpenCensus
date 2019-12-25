@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - uses: docker://nikolaik/python-nodejs:python3.7-nodejs12-alpine
+    - uses: docker://nikolaik/python-nodejs:python3.7-nodejs12
       with:
         node-version: '11.x'
     - run: |
@@ -23,7 +23,6 @@ jobs:
         ../node_modules/serverless/bin/serverless.js deploy
         cd ..
         done
-      shell: sh
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
