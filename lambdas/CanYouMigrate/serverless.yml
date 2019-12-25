@@ -33,12 +33,12 @@ custom:
   # censusBucket:
   #   Ref: CensusBucket
 
-# package:
+package:
 #   individually: false
-  # exclude:
-  #   - "./build/**"
-  #   - "./node_modules/**"
-  #   - "./venv/**"
+  exclude:
+    - "./build/**"
+    - "./node_modules/**"
+    - "./venv/**"
 
 provider:
   name: aws

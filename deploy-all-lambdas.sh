@@ -9,6 +9,7 @@ do
 		pip install -r dev-requirements.txt
 		python setup.py build_ext --inplace
 		deactivate
+		rm -rf venv
 	fi
 	if [ -f package.json ]
 	then
