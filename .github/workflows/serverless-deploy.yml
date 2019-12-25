@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - uses: nikolaik/python-nodejs@python3.7-nodejs12-alpine
+    - uses: docker://nikolaik/python-nodejs:python3.7-nodejs12-alpine
       with:
         node-version: '11.x'
     - run: |
