@@ -210,6 +210,7 @@ __pycache__/
 
 # C extensions
 *.so
+*.c
 
 # Distribution / packaging
 .Python
@@ -370,8 +371,7 @@ venv.bak/
 pip-selfcheck.json
 
 # End of https://www.gitignore.io/api/virtualenv
-frontend/node_modules/
-lambdas/CanYouMigrate/__pycache__/
-lambdas/CanYouMigrate/build/
-lambdas/CanYouMigrate/node_modules/
-lambdas/CanYouMigrate/venv/
+**/node_modules/
+**/__pycache__/
+**/build/
+**/venv/
