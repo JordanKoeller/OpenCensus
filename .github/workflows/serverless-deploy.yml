@@ -14,7 +14,7 @@ jobs:
       with:
         node-version: '11.x'
     - run: |
-        npm i -g serverless@1.59.3
+        npm install serverless@1.59.3
         cd lambdas
         for directory in $(ls -1)
         do
