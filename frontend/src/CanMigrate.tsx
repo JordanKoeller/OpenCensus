@@ -10,33 +10,30 @@ import { SelectCallback } from 'react-bootstrap/helpers';
 type CanMigrateFormProps = {
     options: Array<string>,
     onSubmit: (year: number, countryOfOrigin: string) => void
-    defaultCoo?: number,
-    defaultYear?: number,
 }
 
-const CanMigrateForm: React.FC<CanMigrateFormProps> = (props: CanMigrateFormProps) => {
-    const availOpts = props.options;
-    var coo: string = props.defaultCoo ? props.options[props.defaultCoo] : "";
-    var yr: number = props.defaultYear ? props.defaultYear : 1970;
+const CanMigrateForm: React.FC<CanMigrateFormProps> = ({ options, onSubmit }) => {
+    const [state, setState] = useState({ countryIndex: -1, year: 1970 })
     const handleSelectCountry: SelectCallback = (eventKey: string, e: React.SyntheticEvent<unknown, Event>) => {
-        coo = eventKey;
+        setState({ ...state, countryIndex: options.indexOf(eventKey) });
     };
     const handleSelectYear = (event: React.FormEvent<FormControl & HTMLInputElement>) => {
-        yr = parseInt(event.currentTarget.value);
+        setState({ ...state, year: parseInt(event.currentTarget.value) });
     }
+    const defaultCountryPick = state.countryIndex === -1 ? "" : options[state.countryIndex];
     return <Form>
         <Form.Group as={Row} controlId="formYearInput">
             <Form.Label column sm="auto">
                 Year
-    </Form.Label>
+            </Form.Label>
             <Col sm="auto">
-                <Form.Control as="input" type="number" defaultValue={yr} onChange={handleSelectYear} />
+                <Form.Control as="input" type="number" defaultValue={state.year} onChange={handleSelectYear} />
             </Col>
             <Col sm="auto">
-                <SearchableListPicker title="Select Country of Origin" options={availOpts} onSelected={handleSelectCountry} default={coo} />
+                <SearchableListPicker title="Select Country of Origin" options={options} onSelected={handleSelectCountry} default={defaultCountryPick} />
             </Col>
             <Col>
-                <Button variant="outline-primary" onClick={() => props.onSubmit(yr, coo)}>Submit</Button>
+                <Button variant="outline-primary" onClick={() => onSubmit(state.year, options[state.countryIndex])}>Submit</Button>
             </Col>
         </Form.Group>
     </Form>
@@ -95,8 +92,8 @@ const CanMigrateAppPage: React.FC = () => {
             headers: { 'Content-Type': 'text/plain' },
             method: 'GET'
         });
-        countryRequest.then((e:Response) => e.json()).then((e: {countries: string[]}) => {
-            setState({...state, countryOptions: e.countries});
+        countryRequest.then((e: Response) => e.json()).then((e: { countries: string[] }) => {
+            setState({ ...state, countryOptions: e.countries });
         });
 
         return <Container>
@@ -121,24 +118,26 @@ const CanMigrateAppPage: React.FC = () => {
             const waitRequest: Promise<Response> = fetch(url, {
                 headers: { 'Content-Type': 'text/plain' },
                 method: 'POST',
-                body: JSON.stringify({'country': countryOfOrigin, 'year': year})
+                body: JSON.stringify({ 'country': countryOfOrigin, 'year': year })
             });
-            waitRequest.then((e: Response) => e.json()).then((js: {waitMin: number, waitMax: number}) => {
+            waitRequest.then((e: Response) => e.json()).then((js: { waitMin: number, waitMax: number }) => {
                 let canMoveMsg = "Welcome to America!";
                 let alertType = "success";
+                const avgWait = Math.round((js.waitMin + js.waitMax) / 2);
                 if (js.waitMax < 2) {
                     canMoveMsg = `Welcome to America! You should be able to move in
-                        ${js.waitMin} to ${js.waitMax} years.`;
+                        approximately ${avgWait} years.`;
                     alertType = 'success';
                 } else if (js.waitMax < 10) {
                     canMoveMsg = `You qualify for citizenship, but too many people from
                         ${countryOfOrigin} have been applying to move to America recently.
-                        You should expect to wait from ${js.waitMin} to ${js.waitMax} to
+                        You should expect to wait approximately ${avgWait} years to
                         live in the US.`;
                     alertType = 'warning';
                 } else {
-                    canMoveMsg = `I'm sorry, America is full. You might be able to move in about ${js.waitMax}
-                        years but we are not accepting any more citizens from ${countryOfOrigin} at this time.`
+                    canMoveMsg = `I'm sorry, America is full. You might be able to move in about ${avgWait}
+                        years but we are not accepting any more citizens from ${countryOfOrigin} at this time.
+                        Would you like to put your name on the waitlist?`
                     alertType = 'danger';
                 }
                 setState({
