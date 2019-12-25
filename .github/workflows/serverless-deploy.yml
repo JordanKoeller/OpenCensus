@@ -11,8 +11,8 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - uses: docker://nikolaik/python-nodejs:python3.7-nodejs12
+    - run: npm install serverless@1.59.3
     - run: |
-        npm install serverless@1.59.3
         cd lambdas
         for directory in $(ls -1)
         do
