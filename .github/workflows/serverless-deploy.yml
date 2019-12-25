@@ -14,7 +14,6 @@ jobs:
       with:
         node-version: '11.x'
     - run: |
-        su
         npm i -g serverless@1.59.3
         cd lambdas
         for directory in $(ls -1)
