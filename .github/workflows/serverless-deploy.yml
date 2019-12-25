@@ -18,10 +18,10 @@ jobs:
         cd lambdas
         for directory in $(ls -1)
         do
-        pushd $directory
+        cd $directory
         npm install
         serverless deploy
-        popd
+        cd ..
         done
       shell: sh
       env:
