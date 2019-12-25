@@ -19,6 +19,7 @@ plugins:
 
 custom:
   pythonRequirements:
+    pythonBin: /usr/local/bin/python3.7
     dockerizePip: non-linux
     # noDeploy:
     #   - Cython
