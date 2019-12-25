@@ -10,13 +10,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - uses: actions/npm@master
+    - uses: actions/setup-node@v1
       with:
-        args: install
-    - name: serverless Deploy
-      uses: serverless/github-action@master
-      with:
-        args: deploy
+        node-version: '11.x'
+    - run: |
+        npm i -g serverless@1.54.0
+        cd lambdas
+        for directory in $(ls -1)
+        pushd $directory
+        npm install
+        serverless deploy
+        popd
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
