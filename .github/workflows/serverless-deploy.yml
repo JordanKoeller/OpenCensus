@@ -20,7 +20,7 @@ jobs:
         do
         cd $directory
         npm install
-        serverless deploy
+        ../node_modules/serverless/bin/serverless.js deploy
         cd ..
         done
       shell: sh
