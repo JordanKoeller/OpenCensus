@@ -17,10 +17,12 @@ jobs:
         npm i -g serverless@1.54.0
         cd lambdas
         for directory in $(ls -1)
+        do
         pushd $directory
         npm install
         serverless deploy
         popd
+        done
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
