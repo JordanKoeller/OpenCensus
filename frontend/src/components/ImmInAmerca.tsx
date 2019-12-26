@@ -62,6 +62,19 @@ const ImmInAmerica: React.FC = () => {
       or have worked for at least two years in a profession requiring two years of technical training in the past five years. Acceptance through this avenue is done
       through a lottery system of the individauls meeting the requirements as well as the typical vetting process performed by the Department of Homeland Security.
   </p>
+
+  <h4>
+      References:
+      </h4>
+    <ul>
+      <li>
+        <p>
+          Fact Sheet: How the United States Immigration System Works.
+      <br />
+          American Immigration Council. Published in Oct. 2019.
+      </p>
+      </li>
+    </ul>
   </div>
 }
 
