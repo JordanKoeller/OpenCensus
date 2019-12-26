@@ -27,19 +27,22 @@ const OurAnalysis: React.FC = () => {
       </h4>
     <ul>
       <li>
-        <p>
-          Bicentennial Edition: Historical Statistics of the United States, Colonial Times to 1970. Chapter C: Migration.
+        <a href="https://www.census.gov/library/publications/1975/compendia/hist_stats_colonial-1970.html">
+          <p>
+            Bicentennial Edition: Historical Statistics of the United States, Colonial Times to 1970. Chapter C: Migration.
         <br />
-          United States Census Bureau. Published in 1975.
+            United States Census Bureau. Published in 1975.
       </p>
+        </a>
       </li>
       <li>
-        <p>
-          Fact Sheet: How the United States Immigration System Works.
+        <a href="https://www.americanimmigrationcouncil.org/research/how-united-states-immigration-system-works">
+          <p>
+            Fact Sheet: How the United States Immigration System Works.
       <br />
-          American Immigration Council. Published in Oct. 2019.
+            American Immigration Council. Published in Oct. 2019.
       </p>
-
+        </a>
       </li>
     </ul>
   </div>
