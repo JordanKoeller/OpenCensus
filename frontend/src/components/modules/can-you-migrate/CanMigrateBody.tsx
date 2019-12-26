@@ -1,6 +1,6 @@
 // import './App.css';
 import React, { useState } from 'react';
-import { Row, Form, Col, Container, Button, FormControl, Alert } from 'react-bootstrap';
+import { Row, Form, Col, Container, Button, FormControl, Alert, Jumbotron } from 'react-bootstrap';
 // Material components imports
 
 type CanMigrateFormProps = {
@@ -12,7 +12,7 @@ const CanMigrateForm: React.FC<CanMigrateFormProps> = ({ options, onSubmit }) =>
     const [state, setState] = useState({ country: "", year: 1970 })
     const handleSelectCountry = (event: React.FormEvent<FormControl & HTMLInputElement>) => {
         console.log(event.currentTarget.value);
-        setState({...state, country: event.currentTarget.value})
+        setState({ ...state, country: event.currentTarget.value })
     }
     const handleSelectYear = (event: React.FormEvent<FormControl & HTMLInputElement>) => {
         setState({ ...state, year: parseInt(event.currentTarget.value) });
@@ -54,9 +54,6 @@ const CanMigrateAppPage: React.FC = () => {
     };
     const [state, setState] = useState<StateType>({ year: 1970, countryOfOrigin: "" });
     const headerDiv = <div>
-        <h2>
-            Could your family have moved to America?
-        </h2>
         <p>
             Since the founding of America, our immigration laws have changed many times. This
             allows us to ask an interesting question: could your family have moved to America
@@ -68,12 +65,9 @@ const CanMigrateAppPage: React.FC = () => {
         </p>
     </div>
     const footerDiv = <div>
-    <p>
-        Did you manage to make it? It's interesting to think about how different America could look
-        if today's immigration law had been set by the founders.
-    </p>
-    <p>
-        To find out more about how this app works, see <a href="/Methods">Our Methods</a>.
+        <p>
+            Did you manage to make it? It's interesting to think about how different America could look
+            if today's immigration law had been set by the founders.
     </p>
     </div>
     if (state.countryOptions === undefined) {
@@ -142,14 +136,14 @@ const CanMigrateAppPage: React.FC = () => {
             <Row>
                 {headerDiv}
             </Row>
+                <Jumbotron style={{ width: "100%", alignContent: "middle" }}>
             <Row>
-                <hr></hr>
-                <CanMigrateForm options={state.countryOptions!} onSubmit={computeCanCome} />
-                <hr></hr>
+                    <CanMigrateForm options={state.countryOptions!} onSubmit={computeCanCome} />
             </Row>
             <Row>
                 {state.canMoveMsg ? <Alert variant={state.alertType}>{state.canMoveMsg}</Alert> : ""}
             </Row>
+                </Jumbotron>
             <Row>
                 {footerDiv}
             </Row>

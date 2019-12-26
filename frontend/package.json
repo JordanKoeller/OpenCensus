@@ -23,7 +23,7 @@
     "react-bootstrap": "^1.0.0-beta.16",
     "react-data-fetching": "^1.0.0-beta.1",
     "react-dom": "^16.12.0",
-    "react-router-dom": "^4.3.1",
+    "react-router-dom": "^5.1.2",
     "react-scripts": "^3.3.0",
     "react-sortable-hoc": "^0.8.3",
     "request": "^2.88.0",

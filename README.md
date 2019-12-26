@@ -8,5 +8,6 @@ Any claims made on OpenJustice are fact-checked and must include a reference to 
 ## OpenJustice is an open-source, community-driven project.
 OpenJustice is an open-source project made from the contributions of many individuals. Anybody with an idea and the technical know-how to create a page may submit a project. However, in order for the project to be included on OpenJustice.info it has been rigorously vetted for factual accuracy, validity, and relevance. It also must meet our citations and references guidelines to be approved.
 
-## Interested in contributing?
-see the CONTRIBUTING.md file for information on how to contribute to the project.
+# Contributing to OpenJustice
+
+Interested in contributing? Have an idea for something you think should be included in OpenJustice? See CONTRIBUTING.md for contributing guidelines.

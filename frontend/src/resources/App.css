@@ -1,5 +1,5 @@
 body {
-  background-color: #eee;
+  background-color: #f4f4f4;
 }
 
 .Site {
@@ -31,17 +31,6 @@ footer {
   margin-right: auto;
   margin-top: 2.5em;
   margin-bottom: 2.5em;
-}
-
-.page-content {
-  padding-top: 2.5em;
-  padding-bottom: 2.5em;
-  margin-top: 2.5em;
-  margin-bottom: 2.5em;
-  padding-left: 1.0em;
-  padding-right: 1.0em;
-  background-color: white;
-  width: 100%;
 }
 
 

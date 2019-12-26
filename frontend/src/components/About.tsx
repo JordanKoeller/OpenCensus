@@ -1,8 +1,17 @@
 import React from 'react';
+import { Container, Row } from 'react-bootstrap';
 
 const About: React.FC = () => {
-    return <div>
-      <h1>About</h1>
+  return <Container>
+    <Row>
+      <div className="title-block">
+        <h1 className="page-title">
+          About Open Justice
+        </h1>
+      </div>
+    </Row>
+    <Row>
+      <div className="content-block">
       <h3>
         OpenJustice is an open-source project aimed at presenting information about
         modern American society in a data-driven, interractive way.
@@ -39,6 +48,10 @@ const About: React.FC = () => {
          for more info on how to add to the project.
       </h4>
       </div>
+    </Row>
+    <Row />
+  </Container>
+
   }
 
   export default About;

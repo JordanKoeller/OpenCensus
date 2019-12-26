@@ -6,6 +6,7 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
+  Redirect
 } from 'react-router-dom';
 // Material components imports
 import Navbar from 'react-bootstrap/Navbar';
@@ -16,9 +17,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 import { Container, Col, Row } from 'react-bootstrap';
-import CanMigrateAppPage from './CanMigrate';
-import ImmInAmerica from './ImmInAmerca';
-import OurAnalysis from './Methods';
+import CanMigrateModule from './modules/can-you-migrate/can-migrate-module';
 import About from './About';
 
 const Footer: React.FC = () => {
@@ -52,48 +51,28 @@ const App: React.FC = () => {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav className="mr-auto">
-                <Nav.Link href="/ImmigrationInAmerica">
-                  American Immigration Policy
+                <Nav.Link href="/CanYouMigrate">
+                  Could You Migrate to America?
               </Nav.Link>
-                <Nav.Link href="/Methods">
-                  Our Analysis
-              </Nav.Link>
-                <Nav.Link href="/About">
-                  About Us
+              <Nav.Link href="/AboutOpenJustice">
+                About Open Justice
               </Nav.Link>
               </Nav>
             </Navbar.Collapse>
           </Navbar>
         </header>
         <div className="Site-content">
-          <Container>
-            <Col xs={0} sm={0} md={0} lg="3"></Col>
-            <Col>
-              <Row>
-                <div className="page-content">
-                  <Switch>
-                    <Route path="/ImmigrationInAmerica">
-                      <ImmInAmerica />
-                    </Route>
-                    <Route path="/Methods">
-                      <OurAnalysis />
-                    </Route>
-                    <Route path="/About">
-                      <About />
-                    </Route>
-                    <Route path="/Home">
-                      <CanMigrateAppPage />
-                    </Route>
-                    <Route path="">
-                      <CanMigrateAppPage />
-                    </Route>
-                  </Switch>
-                </div>
-              </Row>
-              <Row></Row>
-            </Col>
-            <Col xs={0} sm={0} md={0} lg="3"></Col>
-          </Container>
+            <Switch>
+              <Route path="/CanYouMigrate">
+                <CanMigrateModule/>
+              </Route>
+              <Route path="/AboutOpenJustice">
+                <About />
+              </Route>
+              <Route path="">
+                <Redirect to="/CanYouMigrate"/>
+              </Route>
+            </Switch>
         </div>
         <footer>
           <Footer></Footer>
