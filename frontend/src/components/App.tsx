@@ -72,9 +72,6 @@ const App: React.FC = () => {
               <Row>
                 <div className="page-content">
                   <Switch>
-                    <Route path="/Home">
-                      <CanMigrateAppPage />
-                    </Route>
                     <Route path="/ImmigrationInAmerica">
                       <ImmInAmerica />
                     </Route>
@@ -83,6 +80,12 @@ const App: React.FC = () => {
                     </Route>
                     <Route path="/About">
                       <About />
+                    </Route>
+                    <Route path="/Home">
+                      <CanMigrateAppPage />
+                    </Route>
+                    <Route path="">
+                      <CanMigrateAppPage />
                     </Route>
                   </Switch>
                 </div>
