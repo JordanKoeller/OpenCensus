@@ -3,24 +3,25 @@ import React, { useState } from 'react';
 import { Row, Form, Col, Container, Button, FormControl, Alert } from 'react-bootstrap';
 // Material components imports
 
-import SearchableListPicker from './SearchableListPicker';
-import { SelectCallback } from 'react-bootstrap/helpers';
-
-
 type CanMigrateFormProps = {
     options: Array<string>,
     onSubmit: (year: number, countryOfOrigin: string) => void
 }
 
 const CanMigrateForm: React.FC<CanMigrateFormProps> = ({ options, onSubmit }) => {
-    const [state, setState] = useState({ countryIndex: -1, year: 1970 })
-    const handleSelectCountry: SelectCallback = (eventKey: string, e: React.SyntheticEvent<unknown, Event>) => {
-        setState({ ...state, countryIndex: options.indexOf(eventKey) });
-    };
+    const [state, setState] = useState({ country: "", year: 1970 })
+    const handleSelectCountry = (event: React.FormEvent<FormControl & HTMLInputElement>) => {
+        console.log(event.currentTarget.value);
+        setState({...state, country: event.currentTarget.value})
+    }
     const handleSelectYear = (event: React.FormEvent<FormControl & HTMLInputElement>) => {
         setState({ ...state, year: parseInt(event.currentTarget.value) });
     }
-    const defaultCountryPick = state.countryIndex === -1 ? "" : options[state.countryIndex];
+    const submissionFunction = () => {
+        if (state.country !== "Select Country of Origin") {
+            onSubmit(state.year, state.country);
+        }
+    }
     return <Form>
         <Form.Group as={Row} controlId="formYearInput">
             <Form.Label column sm="auto">
@@ -30,10 +31,13 @@ const CanMigrateForm: React.FC<CanMigrateFormProps> = ({ options, onSubmit }) =>
                 <Form.Control as="input" type="number" defaultValue={state.year} onChange={handleSelectYear} />
             </Col>
             <Col sm="auto">
-                <SearchableListPicker title="Select Country of Origin" options={options} onSelected={handleSelectCountry} default={defaultCountryPick} />
+                <Form.Control as="select" onChange={handleSelectCountry}>
+                    <option>Select Country of Origin</option>
+                    {options.map((elem: string) => <option>{elem}</option>)}
+                </Form.Control>
             </Col>
             <Col>
-                <Button variant="outline-primary" onClick={() => onSubmit(state.year, options[state.countryIndex])}>Submit</Button>
+                <Button variant="outline-primary" onClick={submissionFunction}>Submit</Button>
             </Col>
         </Form.Group>
     </Form>
@@ -50,41 +54,27 @@ const CanMigrateAppPage: React.FC = () => {
     };
     const [state, setState] = useState<StateType>({ year: 1970, countryOfOrigin: "" });
     const headerDiv = <div>
+        <h2>
+            Could your family have moved to America?
+        </h2>
         <p>
-            U.S. immigration law is complex, and there is much confusion as to how it works.
-            Immigration law in the United States has been built upon the following principles:
-            the reunification of families, admitting immigrants with skills that are valuable
-            to the U.S. economy, protecting refugees, and promoting diversity. This fact sheet
-            provides basic information about how the U.S. legal immigration system is designed
-            and functions.
+            Since the founding of America, our immigration laws have changed many times. This
+            allows us to ask an interesting question: could your family have moved to America
+            under today's current immigration law? What if today's immigration law had been
+            on the book for all of American history? This app analyzes historical census data
+            to answer this question. Put in where your family moved from and what
+            year down below and you can find out. To give you a fighting chance, we will assume
+            your family passed the Department of Homeland Security's background checks.
         </p>
-        <p>
-            The body of law governing current immigration policy is called The Immigration and
-            Nationality Act (INA). The INA allows the United States to grant up to 675,000
-            permanent immigrant visas each year across various visa categories. On top of those
-            675,000 visas, the INA sets no limit on the annual admission of U.S. citizens’ spouses,
-            parents, and children under the age of 21. In addition, each year the president is
-            required to consult with Congress and set an annual number of refugees to be admitted
-            to the United States through the U.S. Refugee Resettlement Process.
-        </p>
-        <p>
-            Once a person obtains an immigrant visa and comes to the United States, they become a
-            lawful permanent resident (LPR). In some circumstances, noncitizens already inside the
-            United States can obtain LPR status through a process known as “adjustment of status.”
-            Lawful permanent residents are foreign nationals who are permitted to work and live lawfully
-            and permanently in the United States. LPRs are eligible to apply for nearly all jobs
-            (i.e., jobs not legitimately restricted to U.S. citizens) and can remain in the country
-            permanently, even if they are unemployed. After residing in the United States for five years
-            (or three years in some circumstances), LPRs are eligible to apply for U.S. citizenship. It
-            is impossible to apply for citizenship through the normal process without first becoming an
-            LPR. Each year the United States also admits a variety of noncitizens on a temporary basis.
-            Such “non-immigrant” visas are granted to everyone from tourists to foreign students to
-            temporary workers permitted to remain in the U.S. for years. While certain employment-based
-            visas are subject to annual caps, other non-immigrant visas (including tourist and student
-            visas) have no numerical limits and can be granted to anyone who satisfies the criteria for
-            obtaining the visa.
-        </p>
-
+    </div>
+    const footerDiv = <div>
+    <p>
+        Did you manage to make it? It's interesting to think about how different America could look
+        if today's immigration law had been set by the founders.
+    </p>
+    <p>
+        To find out more about how this app works, see <a href="/Methods">Our Methods</a>.
+    </p>
     </div>
     if (state.countryOptions === undefined) {
         const url = 'https://qqifi2u8bd.execute-api.us-east-1.amazonaws.com/dev' + '/get-country-headers';
@@ -101,15 +91,13 @@ const CanMigrateAppPage: React.FC = () => {
                 {headerDiv}
             </Row>
             <Row>
-                <h2>
-                    Could your family have moved to America?
-            </h2>
-            </Row>
-            <Row>
                 <h3>Loading App...</h3>
             </Row>
             <Row>
                 {state.canMoveMsg ? <Alert variant={state.alertType}>{state.canMoveMsg}</Alert> : ""}
+            </Row>
+            <Row>
+                {footerDiv}
             </Row>
         </Container>
     } else {
@@ -155,15 +143,15 @@ const CanMigrateAppPage: React.FC = () => {
                 {headerDiv}
             </Row>
             <Row>
-                <h2>
-                    Could your family have moved to America?
-            </h2>
-            </Row>
-            <Row>
+                <hr></hr>
                 <CanMigrateForm options={state.countryOptions!} onSubmit={computeCanCome} />
+                <hr></hr>
             </Row>
             <Row>
                 {state.canMoveMsg ? <Alert variant={state.alertType}>{state.canMoveMsg}</Alert> : ""}
+            </Row>
+            <Row>
+                {footerDiv}
             </Row>
         </Container>
     }
