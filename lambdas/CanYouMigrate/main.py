@@ -26,11 +26,12 @@ S3_ERROR = {
 }
 
 def main(event, context):
-    print(event)
+    logging.info(event)
     path = event['path']
     handlerLookup = {
         '/can-you-migrate': handleCanYouMigrate,
-        '/get-country-headers': handleRequestHeaders
+        '/get-country-headers': handleRequestHeaders,
+        '/migration-history': handleRequestHistoricalMigration,
     }
     return handlerLookup[path](event, context)
 
@@ -45,7 +46,6 @@ def _respond(code, body):
     "body": json.dumps(body)
 }
 
-
 def _getTable():
     BUCKET_NAME = os.environ['CENSUS_BUCKET']
     OBJECT_NAME = os.environ['CENSUS_OBJECT']
@@ -56,7 +56,6 @@ def _getTable():
         sheet = response['Body'].iter_lines()
     except ClientError as e:
         logging.error(e)
-
         return None
     stringParser = map(lambda e: str(e, 'utf-8'), sheet)
     parser = csv.reader(stringParser)
@@ -80,7 +79,29 @@ def handleRequestHeaders(event, context):
         return _respond(200, {'countries': headers})
     return S3_ERROR
 
+def handleRequestHistoricalMigration(event, context):
+    table = _getTable()
+    if table:
+        requestInfo = json.loads(event['body'])
+        country = requestInfo['country']
+        applications = list(table.applied.columnOf(country))
+        projectedAcceptance = list(table.accepted.columnOf(country))
+        body = {
+            'applications': applications,
+            'accepted': projectedAcceptance,
+            'totalApplied': list(table.applied.total),
+            'totalAccepted': list(table.accepted.total)
+        }
+        return _respond(200, body)
+    return S3_ERROR
+
 if __name__== '__main__':
-    mockReq = {'country': 'Ireland', 'year': 1920}
-    resp = main(mockReq, '')
-    logging.debug(resp)
+    import sys
+    args = sys.argv
+    if 'test' in args:
+        import unittest
+        unittest.main(module='test.test_handler')
+    else:
+        mockReq = {'country': 'Ireland', 'year': 1920}
+        resp = main(mockReq, '')
+        logging.debug(resp)

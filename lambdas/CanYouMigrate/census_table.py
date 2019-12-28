@@ -1,6 +1,29 @@
 import numpy as np
 from aggregation_functions import sevenPcntRuleWaitlist, computeExpectedAdmissionYear
 
+class Table:
+
+    def __init__(self, data, rowLookup, columnLookup):
+        self._data = data
+        self._rowLookup = rowLookup
+        self._columnLookup = columnLookup
+    
+    def columnOf(self, header):
+        return self._data[:,self._columnLookup[header]]
+
+    def rowOf(self, header):
+        return self._data[:,self._rowLookup[header]]
+
+    @property
+    def total(self):
+        return np.sum(self._data, axis=1)
+
+    def __getitem__(self, *args, **kwargs):
+        return self._data.__getitem__(*args, **kwargs)
+
+    def __str__(self, *args, **kwargs):
+        return str(self._data)
+
 class CensusTable:
     """
     The `CensusTable` class encapsulates all the analysis functionality for analyzing a csv of immigration data
@@ -22,21 +45,30 @@ class CensusTable:
         ][::-1]
         table = np.array(listTable, dtype=float).astype(np.int64)
         self.years = table[:,0]
-        self.table = table[:,1:]
-        self.waitlist, self.accepted = sevenPcntRuleWaitlist(self.table)
-        self.expectedWaitTime = computeExpectedAdmissionYear(self.accepted, self.waitlist)
+        self._table = table[:,1:]
+        self._waitlist, self._accepted = sevenPcntRuleWaitlist(self._table)
+        self._expectedWaitTime = computeExpectedAdmissionYear(self._accepted, self._waitlist)
         self._countryLookup = {h: ind - 1 for ind, h in enumerate(self.headers)}
         self._yearLookup = {year: ind for ind, year in enumerate(self.years)}
 
     def columnOf(self, header):
-        return self.table[:,self._lookup[header]]
+        return self._table[:,self._lookup[header]]
 
+    def expectedWaitTimeRange(self, countryOfOrigin, year):
+        return self._expectedWaitTime[self._yearLookup[year], self._countryLookup[countryOfOrigin]]
+
+    @property
+    def applied(self):
+        return Table(self._table, self._yearLookup, self._countryLookup)
+
+    @property
+    def waitlist(self):
+        return Table(self._waitlist, self._yearLookup, self._countryLookup)
+
+    @property
+    def accepted(self):
+        return Table(self._accepted, self._yearLookup, self._countryLookup)
 
     @property
     def sevenPcntRuleAdmission(self):
-        return self.accepted / self.table
-
-    def expectedWaitTimeRange(self, countryOfOrigin, year):
-        return self.expectedWaitTime[self._yearLookup[year], self._countryLookup[countryOfOrigin]]
-        
-
+        return self._accepted / self._table
