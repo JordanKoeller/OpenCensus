@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Tooltip, Legend, Line, CartesianGrid, ResponsiveContainer, RechartsFunction, BarChart, XAxis, YAxis, Bar } from 'recharts';
 import SelectZoomLineChart from '../../SelectZoomLineChart';
 import { Container, Row, Jumbotron, ButtonToolbar, Button } from 'react-bootstrap';
-import rgb from '../../../utils';
+import rgb, { CAN_MIGRATE_API } from '../../../utils';
 
 export type MigrationHistoryPlotDataType = {
     accepted: number[],
@@ -187,7 +187,7 @@ const ExploreData: React.FC<{ defaultCountry?: number }> = ({ defaultCountry }) 
     const [state, setState] = useState<ExploreDataState>({});
     defaultCountry = defaultCountry === undefined ? 10 : defaultCountry;
     if (!state.plotData || !state.headers) {
-        const headersUrl = process.env.REACT_APP_CAN_MIGRATE_API + '/get-country-headers';
+        const headersUrl = CAN_MIGRATE_API + '/get-country-headers';
         const headersRequest = fetch(headersUrl, { headers: { 'Content-Type': 'text/plain', 'Origin': '*' }, method: 'GET' })
             .then((e: Response) => e.json()).then((e: any) => e.countries as string[]);
         const plotRequestUrl = process.env.REACT_APP_CAN_MIGRATE_API + '/migration-history';

@@ -1,6 +1,7 @@
 // import './App.css';
 import React, { useState } from 'react';
 import { Row, Form, Col, Container, Button, FormControl, Alert, Jumbotron } from 'react-bootstrap';
+import { CAN_MIGRATE_API } from '../../../utils';
 
 // Material components imports
 
@@ -81,7 +82,7 @@ const CanMigrateAppPage: React.FC = () => {
     </p>
     </div>);
     if (state.countryOptions === undefined) {
-        const url = process.env.REACT_APP_CAN_MIGRATE_API + '/get-country-headers';
+        const url = CAN_MIGRATE_API + '/get-country-headers';
         console.log(url);
         const countryRequest: Promise<Response> = fetch(url, {
             headers: { 'Content-Type': 'text/plain' },
@@ -108,7 +109,7 @@ const CanMigrateAppPage: React.FC = () => {
     } else {
         const computeCanCome = (year: number, countryOfOrigin: string) => {
             // Get data for responding a blerb about the person's potential to immigrate
-            const url = process.env.REACT_APP_CAN_MIGRATE_API + '/can-you-migrate';
+            const url = CAN_MIGRATE_API + '/can-you-migrate';
             const req1 = fetch(url, {
                 headers: { 'Content-Type': 'text/plain' },
                 method: 'POST',
