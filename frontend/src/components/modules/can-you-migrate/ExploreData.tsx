@@ -190,7 +190,7 @@ const ExploreData: React.FC<{ defaultCountry?: number }> = ({ defaultCountry }) 
         const headersUrl = CAN_MIGRATE_API + '/get-country-headers';
         const headersRequest = fetch(headersUrl, { headers: { 'Content-Type': 'text/plain', 'Origin': '*' }, method: 'GET' })
             .then((e: Response) => e.json()).then((e: any) => e.countries as string[]);
-        const plotRequestUrl = process.env.REACT_APP_CAN_MIGRATE_API + '/migration-history';
+        const plotRequestUrl = CAN_MIGRATE_API + '/migration-history';
         const dataFetch = fetch(plotRequestUrl, {
             headers: { 'Content-Type': 'text/plain', 'Origin': '*' },
             method: 'GET',
