@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, PureComponent } from 'react';
 import { Tooltip, Legend, Line, CartesianGrid, ResponsiveContainer, RechartsFunction, BarChart, XAxis, YAxis, Bar } from 'recharts';
 import SelectZoomLineChart from '../../SelectZoomLineChart';
 import { Container, Row, Jumbotron, ButtonToolbar, Button } from 'react-bootstrap';
@@ -46,6 +46,19 @@ const COLOR_CIRCLE: [number, number, number][] = [
 
 const NUM_COLORS = COLOR_CIRCLE.length;
 
+class CustomizedAxisTick extends PureComponent<any> {
+    render() {
+      const {
+        x, y, stroke, payload,
+      } = this.props;
+  
+      return (
+        <g transform={`translate(${x},${y})`}>
+          <text x={0} y={0} dy={16} textAnchor="end" fill="#666" transform="rotate(-90)">{payload.value}</text>
+        </g>
+      );
+    }
+  }
 
 const Plots: React.FC<ImmigrationPlotProps> = ({ plotData, columnHeaders }: ImmigrationPlotProps) => {
     const [state, setState] = useState<ImmigrationPlotState | undefined>();
@@ -62,20 +75,22 @@ const Plots: React.FC<ImmigrationPlotProps> = ({ plotData, columnHeaders }: Immi
             focusYear: 1900,
             focusCountry: [0]
         });
-        return <div></div>
+        return <div></div>;
+
     }
     const onMouseMove: RechartsFunction = (event?: { activeLabel: number }) => {
         if (event && event.activeLabel) {
             setState({ ...state, focusYear: event.activeLabel });
         }
     };
+
     return <Container>
         <Row>
             <h4>
                 The following data compares and contrasts what immigration did look like and what
                 would have looked like under today's immigration laws.
             </h4>
-            <br/>
+            <br />
             <p>
                 To show the difference, we use the actual historical numbers of immigrating individuals
                 as the number of applicants for immigration. The accepted numbers display how many
@@ -83,11 +98,11 @@ const Plots: React.FC<ImmigrationPlotProps> = ({ plotData, columnHeaders }: Immi
                 between applications and acceptances, in accordance with the waitlist system introduced
                 by today's law.
             </p>
-            <br/>
+            <br />
         </Row>
         <Row>
             <h4>Select the countries you would like to see data for:</h4>
-            <br/>
+            <br />
             <ButtonToolbar>
                 {columnHeaders.map((name: string, id: number) => {
                     const onClick = (_e: any) => {
@@ -108,7 +123,7 @@ const Plots: React.FC<ImmigrationPlotProps> = ({ plotData, columnHeaders }: Immi
                 })}
             </ButtonToolbar>
         </Row>
-        <br/>
+        <br />
         <Row>
             <h1> Immigration Per Country Per Year</h1>
         </Row>
@@ -116,8 +131,8 @@ const Plots: React.FC<ImmigrationPlotProps> = ({ plotData, columnHeaders }: Immi
             <ResponsiveContainer aspect={1.5} height={600}>
                 <SelectZoomLineChart
                     data={state.data}
-                    margin={{ top: 20, right: 30, left: 10, bottom: 80 }}
-                    xAxProps={{ dataKey: "year", type: "number", tickCount: 8 }}
+                    margin={{ top: 20, right: 30, left: 10, bottom: 120 }}
+                    xAxProps={{ dataKey: "year", type: "number", tickCount: 8, label: { value: 'Year', position: 'insideBottom', offset: 0 }}}
                     onMouseMove={onMouseMove}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <Tooltip />
@@ -125,6 +140,7 @@ const Plots: React.FC<ImmigrationPlotProps> = ({ plotData, columnHeaders }: Immi
                     {
                         state.focusCountry.map((id, ind) =>
                             <Line type="monotone"
+                                unit=" People"
                                 dataKey={e => e.data[id].applications}
                                 stroke={rgb(COLOR_CIRCLE[ind % NUM_COLORS])}
                                 dot={false}
@@ -134,6 +150,7 @@ const Plots: React.FC<ImmigrationPlotProps> = ({ plotData, columnHeaders }: Immi
                     {
                         state.focusCountry.map((id, ind) =>
                             <Line type="monotone"
+                                unit=" People"
                                 dataKey={e => e.data[id].accepted}
                                 stroke={rgb(COLOR_CIRCLE[(ind + 1) % NUM_COLORS])}
                                 dot={false}
@@ -143,6 +160,7 @@ const Plots: React.FC<ImmigrationPlotProps> = ({ plotData, columnHeaders }: Immi
                     {/* {
                         state.focusCountry.map((id, ind) =>
                             <Line type="monotone"
+                                unit=" people"
                                 dataKey={e => e.data[id].waitlisted}
                                 stroke={rgb(COLOR_CIRCLE[ind % NUM_COLORS])}
                                 dot={false}
@@ -155,23 +173,22 @@ const Plots: React.FC<ImmigrationPlotProps> = ({ plotData, columnHeaders }: Immi
         <Row>
             <h1> Immigration in {state.focusYear}</h1>
         </Row>
-        <br/>
+        <br />
         <Row>
             <BarChart
                 width={900}
                 height={450}
                 data={state.data[state.focusYear - state.baseYear].data.slice(0, state.data[state.focusYear - state.baseYear].data.length - 1)}
                 margin={{
-                    top: 20, right: 30, left: 20, bottom: 5,
+                    top: 20, right: 30, left: 20, bottom: 100,
                 }}
             >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="country" />
+            <XAxis dataKey="country" tick={<CustomizedAxisTick />} type="category" interval={0}/>
                 <YAxis />
                 <Tooltip />
-                <Legend />
-                <Bar dataKey="accepted" fill="#82ca9d" isAnimationActive={false} />
-                <Bar dataKey="applied" fill="#8884d8" isAnimationActive={false} />
+                <Bar dataKey="accepted" unit=" People" fill="#82ca9d" isAnimationActive={false} />
+                <Bar dataKey="applied" unit=" people" fill="#8884d8" isAnimationActive={false} />
             </BarChart>
         </Row>
     </Container>
@@ -218,14 +235,31 @@ const ExploreData: React.FC<{ defaultCountry?: number }> = ({ defaultCountry }) 
         });
     }
     if (!state.plotData) {
-        return <div />
+        return <Container>
+            <Row>
+                <h4>
+                    The following data compares and contrasts what immigration did look like and what
+                    would have looked like under today's immigration laws.
+        </h4>
+                <br />
+                <p>
+                    To show the difference, we use the actual historical numbers of immigrating individuals
+                    as the number of applicants for immigration. The accepted numbers display how many
+                    people would be admitted under today's law. The waitlisted values display the difference
+                    between applications and acceptances, in accordance with the waitlist system introduced
+                    by today's law.
+        </p>
+                <br />
+            </Row>
+            <Row>
+                <h3>Loading...</h3>
+            </Row>
+        </Container>
     }
-    return <Jumbotron style={{ height: "100%", width: "100%", alignContent: "middle" }}>
-        <Plots
-            plotData={state.plotData!}
-            columnHeaders={state.headers!}
-        />
-    </Jumbotron>
+    return <Plots
+        plotData={state.plotData!}
+        columnHeaders={state.headers!}
+    />
 };
 
 export default ExploreData;
