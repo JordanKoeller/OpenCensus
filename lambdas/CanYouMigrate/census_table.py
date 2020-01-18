@@ -14,6 +14,9 @@ class Table:
     def rowOf(self, header):
         return self._data[:,self._rowLookup[header]]
 
+    def tolist(self):
+        return self._data.tolist()
+
     @property
     def total(self):
         return np.sum(self._data, axis=1)
@@ -22,7 +25,7 @@ class Table:
         return self._data.__getitem__(*args, **kwargs)
 
     def __str__(self, *args, **kwargs):
-        return str(self._data)
+        return str(self._data.tolist())
 
 class CensusTable:
     """
@@ -38,12 +41,13 @@ class CensusTable:
 
 
     def __init__(self, parser):
-        self.headers = next(parser)
+        headers = [s for s in next(parser)]
         listTable = [
-            [cell for ind, cell in enumerate(row) if 'Total' not in self.headers[ind]]
+            [cell for ind, cell in enumerate(row) if 'Total' not in headers[ind]]
             for row in parser
         ][::-1]
-        table = np.array(listTable, dtype=float).astype(np.int64)
+        self.headers = [s for s in headers  if 'Total' not in s and 'Year' not in s]
+        table = np.array(listTable, dtype=float).astype(int)
         self.years = table[:,0]
         self._table = table[:,1:]
         self._waitlist, self._accepted = sevenPcntRuleWaitlist(self._table)

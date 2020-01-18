@@ -8,7 +8,7 @@ import {
 // Material components imports
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
-import { Container, Row, Card } from 'react-bootstrap';
+import { Container, Card } from 'react-bootstrap';
 
 import '../../resources/module-skeleton.css';
 
@@ -19,7 +19,7 @@ export type ReferenceElement = {
     year: string,
     chapter?: string,
     author?: string,
-}
+};
 
 
 export type ModuleProps = {
@@ -27,20 +27,21 @@ export type ModuleProps = {
     AppComponent: React.FC,
     MethodsComponent: React.FC,
     BackgroundInfoComponent: React.FC,
+    ExploreDataComponent: React.FC,
     references: Array<ReferenceElement>
-}
+};
 
 const Module: React.FC<ModuleProps> = ({ title,
     AppComponent,
     MethodsComponent,
     BackgroundInfoComponent,
+    ExploreDataComponent,
     references }) => {
     const { path, url } = useRouteMatch();
     return <Router>
         <div>
-            <Navbar className="thin-navbar" collapseOnSelect expand="lg" bg="dark" variant="dark">
+            <Navbar className="thin-navbar" collapseOnSelect bg="dark" variant="dark">
                 <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-                <Navbar.Collapse id="responsive-navbar-nav">
                     <Nav className="mr-auto">
                         <Nav.Link bsPrefix="thin-navlink nav-link" href={`${url}`}>
                             {title}
@@ -51,8 +52,10 @@ const Module: React.FC<ModuleProps> = ({ title,
                         <Nav.Link bsPrefix="thin-navlink nav-link" href={`${url}/Background`}>
                             Background Information
               </Nav.Link>
+              <Nav.Link bsPrefix="thin-navlink nav-link" href={`${url}/Data`}>
+                            Explore the Data
+              </Nav.Link>
                     </Nav>
-                </Navbar.Collapse>
             </Navbar>
             <Container>
                 <Card bg="light" style={{ marginTop: "2.5em", marginBottom: "2.5em" }}>
@@ -85,6 +88,9 @@ const Module: React.FC<ModuleProps> = ({ title,
                                 <Route path={`${path}/Background`}>
                                     <BackgroundInfoComponent />
                                 </Route>
+                                <Route path={`${path}/Data`}>
+                                    <ExploreDataComponent />
+                                </Route>
                             </Switch>
                         </Card.Text>
                     </Card.Body>
@@ -112,7 +118,7 @@ const Module: React.FC<ModuleProps> = ({ title,
                 </Card>
             </Container>
         </div>
-    </Router>
+    </Router>;
 }
 
 export default Module;

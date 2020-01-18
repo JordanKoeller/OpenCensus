@@ -1,12 +1,21 @@
 // import './App.css';
 import React, { useState } from 'react';
 import { Row, Form, Col, Container, Button, FormControl, Alert, Jumbotron } from 'react-bootstrap';
+
 // Material components imports
 
 type CanMigrateFormProps = {
     options: Array<string>,
     onSubmit: (year: number, countryOfOrigin: string) => void
 }
+
+type WaitTimeResponse = {
+    waitMin: number,
+    waitMax: number
+};
+
+
+
 
 const CanMigrateForm: React.FC<CanMigrateFormProps> = ({ options, onSubmit }) => {
     const [state, setState] = useState({ country: "", year: 1970 })
@@ -50,10 +59,11 @@ const CanMigrateAppPage: React.FC = () => {
         countryOfOrigin: string,
         canMoveMsg?: string
         alertType?: AlertType,
-        countryOptions?: string[]
+        countryOptions?: string[],
+        countryIndex?: number,
     };
     const [state, setState] = useState<StateType>({ year: 1970, countryOfOrigin: "" });
-    const headerDiv = <div>
+    const headerDiv = (<div>
         <p>
             Since the founding of America, our immigration laws have changed many times. This
             allows us to ask an interesting question: could your family have moved to America
@@ -63,15 +73,16 @@ const CanMigrateAppPage: React.FC = () => {
             year down below and you can find out. To give you a fighting chance, we will assume
             your family passed the Department of Homeland Security's background checks.
         </p>
-    </div>
-    const footerDiv = <div>
+    </div>);
+    const footerDiv = (<div>
         <p>
             Did you manage to make it? It's interesting to think about how different America could look
             if today's immigration law had been set by the founders.
     </p>
-    </div>
+    </div>);
     if (state.countryOptions === undefined) {
-        const url = 'https://qqifi2u8bd.execute-api.us-east-1.amazonaws.com/dev' + '/get-country-headers';
+        const url = process.env.REACT_APP_CAN_MIGRATE_API + '/get-country-headers';
+        console.log(url);
         const countryRequest: Promise<Response> = fetch(url, {
             headers: { 'Content-Type': 'text/plain' },
             method: 'GET'
@@ -96,21 +107,26 @@ const CanMigrateAppPage: React.FC = () => {
         </Container>
     } else {
         const computeCanCome = (year: number, countryOfOrigin: string) => {
-            const url = 'https://qqifi2u8bd.execute-api.us-east-1.amazonaws.com/dev' + '/can-you-migrate';
-            const waitRequest: Promise<Response> = fetch(url, {
+            // Get data for responding a blerb about the person's potential to immigrate
+            const url = process.env.REACT_APP_CAN_MIGRATE_API + '/can-you-migrate';
+            const req1 = fetch(url, {
                 headers: { 'Content-Type': 'text/plain' },
                 method: 'POST',
                 body: JSON.stringify({ 'country': countryOfOrigin, 'year': year })
-            });
-            waitRequest.then((e: Response) => e.json()).then((js: { waitMin: number, waitMax: number }) => {
+            }).then((e: Response) => e.json() as Promise<WaitTimeResponse>);
+            // Get data for plotting historical migration
+
+            // const countryHierarchyUrl = process.env.REACT_APP_CAN_MIGRATE_API + '/get-country-headers/hierarchy';
+            // const req3 = fetch(countryHierarchyUrl, { headers: { 'Content-Type': 'text/plain' }, method: 'GET' }).then((e: Response) => e.json());
+            req1.then((js1: WaitTimeResponse) => {
                 let canMoveMsg = "Welcome to America!";
                 let alertType = "success";
-                const avgWait = Math.round((js.waitMin + js.waitMax) / 2);
-                if (js.waitMax < 2) {
+                const avgWait = Math.round((js1.waitMin + js1.waitMax) / 2);
+                if (js1.waitMax < 2) {
                     canMoveMsg = `Welcome to America! You should be able to move in
                         approximately ${avgWait} years.`;
                     alertType = 'success';
-                } else if (js.waitMax < 10) {
+                } else if (js1.waitMax < 10) {
                     canMoveMsg = `You qualify for citizenship, but too many people from
                         ${countryOfOrigin} have been applying to move to America recently.
                         You should expect to wait approximately ${avgWait} years to
@@ -122,6 +138,7 @@ const CanMigrateAppPage: React.FC = () => {
                         Would you like to put your name on the waitlist?`
                     alertType = 'danger';
                 }
+
                 setState({
                     ...state,
                     'year': year,
@@ -130,24 +147,14 @@ const CanMigrateAppPage: React.FC = () => {
                     'alertType': alertType as AlertType
                 });
             });
-            console.log("Somebody came from " + countryOfOrigin + " in the year " + year.toString());
         }
-        return <Container>
-            <Row>
-                {headerDiv}
-            </Row>
-                <Jumbotron style={{ width: "100%", alignContent: "middle" }}>
-            <Row>
-                    <CanMigrateForm options={state.countryOptions!} onSubmit={computeCanCome} />
-            </Row>
-            <Row>
-                {state.canMoveMsg ? <Alert variant={state.alertType}>{state.canMoveMsg}</Alert> : ""}
-            </Row>
-                </Jumbotron>
-            <Row>
-                {footerDiv}
-            </Row>
-        </Container>
+        return <div>
+            {headerDiv}
+            <Jumbotron style={{ height: "100%", width: "100%", alignContent: "middle" }}>
+                <CanMigrateForm options={state.countryOptions!} onSubmit={computeCanCome} />
+            </Jumbotron>
+            {footerDiv}
+        </div>
     }
 }
 
