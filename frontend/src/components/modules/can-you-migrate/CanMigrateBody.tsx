@@ -109,6 +109,7 @@ const CanMigrateAppPage: React.FC = () => {
     } else {
         const computeCanCome = (year: number, countryOfOrigin: string) => {
             // Get data for responding a blerb about the person's potential to immigrate
+            console.log("Got a response from the form");
             const url = CAN_MIGRATE_API + '/can-you-migrate';
             const req1 = fetch(url, {
                 headers: { 'Content-Type': 'text/plain' },
@@ -120,6 +121,7 @@ const CanMigrateAppPage: React.FC = () => {
             // const countryHierarchyUrl = process.env.REACT_APP_CAN_MIGRATE_API + '/get-country-headers/hierarchy';
             // const req3 = fetch(countryHierarchyUrl, { headers: { 'Content-Type': 'text/plain' }, method: 'GET' }).then((e: Response) => e.json());
             req1.then((js1: WaitTimeResponse) => {
+                console.log("In promise");
                 let canMoveMsg = "Welcome to America!";
                 let alertType = "success";
                 const avgWait = Math.round((js1.waitMin + js1.waitMax) / 2);
@@ -139,7 +141,7 @@ const CanMigrateAppPage: React.FC = () => {
                         Would you like to put your name on the waitlist?`
                     alertType = 'danger';
                 }
-
+                console.log(canMoveMsg);
                 setState({
                     ...state,
                     'year': year,
@@ -153,6 +155,7 @@ const CanMigrateAppPage: React.FC = () => {
             {headerDiv}
             <Jumbotron style={{ height: "100%", width: "100%", alignContent: "middle" }}>
                 <CanMigrateForm options={state.countryOptions!} onSubmit={computeCanCome} />
+                {state.canMoveMsg ? <Alert variant={state.alertType}>{state.canMoveMsg}</Alert> : ""}
             </Jumbotron>
             {footerDiv}
         </div>
