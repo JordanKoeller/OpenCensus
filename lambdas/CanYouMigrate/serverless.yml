@@ -57,3 +57,9 @@ functions:
       - http:
           path: get-country-headers
           method: get
+      - http:
+          path: get-country-headers/hierarchy
+          method: get
+      - http:
+          path: migration-history
+          method: get

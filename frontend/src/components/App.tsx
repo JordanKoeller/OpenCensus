@@ -16,7 +16,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
-import { Container, Col, Row } from 'react-bootstrap';
+import { Container, Row } from 'react-bootstrap';
 import CanMigrateModule from './modules/can-you-migrate/can-migrate-module';
 import About from './About';
 

@@ -20,7 +20,7 @@ const ImmInAmerica: React.FC = () => {
   </h3>
     <p>
       Modern immigration policy is defined in a document called the Immigration and Nationality Act (INA). This is
-    a law that was written in <b> ???</b> that puts restrictions and regulations on who can obtain a U.S. Visa
+    a law that was written in <b> 1965</b> that puts restrictions and regulations on who can obtain a U.S. Visa
           and become a Lawful Permanent Resident. It provides three broad avenues by which immigrants may come to America.
   </p>
     <ul>

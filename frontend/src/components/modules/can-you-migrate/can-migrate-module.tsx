@@ -3,6 +3,7 @@ import Module from '../module-skeleton';
 import CanMigrateAppPage from './CanMigrateBody';
 import OurAnalysis from './Methods';
 import ImmInAmerica from './ImmInAmerca';
+import ExploreData from './ExploreData';
 
 const CanMigrateModule: React.FC = () => {
     const references = [
@@ -25,6 +26,7 @@ const CanMigrateModule: React.FC = () => {
     AppComponent={CanMigrateAppPage}
     MethodsComponent={OurAnalysis}
     BackgroundInfoComponent={ImmInAmerica}
+    ExploreDataComponent={ExploreData}
     references={references}/>
 }
 
