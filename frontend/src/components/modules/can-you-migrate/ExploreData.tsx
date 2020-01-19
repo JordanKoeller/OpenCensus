@@ -141,7 +141,7 @@ const Plots: React.FC<ImmigrationPlotProps> = ({ plotData, columnHeaders }: Immi
                         state.focusCountry.map((id, ind) =>
                             <Line type="monotone"
                                 unit=" People"
-                                dataKey={e => e.data[id].applications}
+                                dataKey={e => e.data[id].applied}
                                 stroke={rgb(COLOR_CIRCLE[ind % NUM_COLORS])}
                                 dot={false}
                                 name={`${columnHeaders[id]} Applications`}
