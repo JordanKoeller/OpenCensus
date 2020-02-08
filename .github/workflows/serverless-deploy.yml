@@ -7,13 +7,12 @@ on:
 
 jobs:
   deploy:
-    runs-on: lambci/lambda:build-python3.7
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - uses: ./.github/actions/serverless-deploy
+    - uses: lambci/lambda:build-python3.7
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         # SLS_DEBUG: "*"
-      with:
-        args: deploy-all-lambdas.sh
+      run: cd lambdas && bash build.sh NoContainer && sam deploy
