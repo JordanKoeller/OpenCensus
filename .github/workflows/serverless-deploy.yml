@@ -16,4 +16,5 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         # SLS_DEBUG: "*"
       with:
-        entrypoint: lambdas/build-deploy.sh
+        entrypoint: bash 
+        args: lambdas/build-deploy.sh
