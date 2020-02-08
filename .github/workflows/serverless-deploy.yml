@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: lambci/lambda:build-python3.7
     steps:
     - uses: actions/checkout@v1
     - uses: ./.github/actions/serverless-deploy
