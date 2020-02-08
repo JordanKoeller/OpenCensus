@@ -11,11 +11,17 @@ class Table:
     def columnOf(self, header):
         return self._data[:,self._columnLookup[header]]
 
-    def rowOf(self, header):
-        return self._data[:,self._rowLookup[header]]
+    def rowOf(self, year):
+        return self._data[self._rowLookup[year]]
 
     def tolist(self):
         return self._data.tolist()
+
+    def get(self, country, year):
+      return self._data[
+        self._rowLookup[year],
+        self._columnLookup[country]
+      ]
 
     @property
     def total(self):
@@ -54,9 +60,6 @@ class CensusTable:
         self._expectedWaitTime = computeExpectedAdmissionYear(self._accepted, self._waitlist)
         self._countryLookup = {h: ind - 1 for ind, h in enumerate(self.headers)}
         self._yearLookup = {year: ind for ind, year in enumerate(self.years)}
-
-    def columnOf(self, header):
-        return self._table[:,self._lookup[header]]
 
     def expectedWaitTimeRange(self, countryOfOrigin, year):
         return self._expectedWaitTime[self._yearLookup[year], self._countryLookup[countryOfOrigin]]

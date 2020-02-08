@@ -1,0 +1,11 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "sam-CanYouMigrate"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-11a0rrkhlg0aw"
+s3_prefix = "sam-CanYouMigrate"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+

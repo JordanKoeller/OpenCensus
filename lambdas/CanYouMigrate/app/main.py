@@ -27,9 +27,10 @@ S3_ERROR = {
 }
 
 def main(event, context):
-    logger.debug("====================BEGIN TRANSACTION========================")
-    logger.debug("========================REQUEST==============================")
-    logger.debug(event)
+    context.log("====================BEGIN TRANSACTION========================\n")
+    context.log("========================REQUEST==============================\n")
+    context.log(event)
+    context.log("\n")
     path = event['path']
     handlerLookup = {
         '/can-you-migrate': handleCanYouMigrate,
@@ -38,9 +39,10 @@ def main(event, context):
         '/migration-history': handleRequestHistoricalMigration,
     }
     resp = handlerLookup[path](event, context)
-    logger.debug("========================RESPONSE=============================")
-    logger.debug(resp)
-    logger.debug("======================END TRANSACTION========================")
+    context.log("========================RESPONSE=============================\n")
+    context.log(resp)
+    context.log("\n")
+    context.log("======================END TRANSACTION========================\n")
     return resp
 
 def _respond(code, body):
@@ -55,8 +57,8 @@ def _respond(code, body):
 }
 
 def _getTable():
-    BUCKET_NAME = os.environ['CENSUS_BUCKET']
-    OBJECT_NAME = os.environ['CENSUS_OBJECT']
+    BUCKET_NAME = "open-justice-resources" # os.environ['CENSUS_BUCKET']
+    OBJECT_NAME = "aggregatedSheet.csv" # os.environ['CENSUS_OBJECT']
     s3 = boto3.client('s3')
     sheet = None
     try:
@@ -73,10 +75,15 @@ def handleCanYouMigrate(event, context):
     table = _getTable()
     if table:
         requestInfo = json.loads(event['body'])
-        expectedWaitRange = table.expectedWaitTimeRange(requestInfo['country'], requestInfo['year'])
+        country = requestInfo['country']
+        year = requestInfo['year']
+        expectedWaitRange = table.expectedWaitTimeRange(country, year)
         return _respond(200, {
             'waitMin': int(expectedWaitRange[0]),
-            'waitMax': int(expectedWaitRange[0])
+            'waitMax': int(expectedWaitRange[0]),
+            'applied': int(table.applied.get(country, year)),
+            'accepted': int(table.accepted.get(country, year)),
+            'waitlist': int(table.waitlist.get(country,year))
         })
     return S3_ERROR
 
@@ -142,4 +149,4 @@ if __name__== '__main__':
             "path": '/can-you-migrate'
         }
         resp = main(mockReq, '')
-        logger.debug(resp)
+        context.log(resp)
