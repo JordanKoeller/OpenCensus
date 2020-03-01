@@ -46,7 +46,7 @@ const CanMigrateForm: React.FC<CanMigrateFormProps> = ({ options, onSubmit }) =>
       <Col sm="auto">
         <Form.Control as="select" onChange={handleSelectCountry}>
           <option>Select Country of Origin</option>
-          {options.map((elem: string) => <option>{elem}</option>)}
+          {options.map((elem: string) => <option key={elem}>{elem}</option>)}
         </Form.Control>
       </Col>
       <Col>
@@ -56,18 +56,39 @@ const CanMigrateForm: React.FC<CanMigrateFormProps> = ({ options, onSubmit }) =>
   </Form>
 }
 
+type AlertType = 'success' | 'danger' | 'warning';
+
+export type AppProps = {
+  countryOptions: string[]
+};
+
+type BodyState = {
+  year: number,
+  countryOfOrigin: string,
+  canMoveMsg?: string,
+  yearMigrationDescription?: string,
+  alertType?: AlertType,
+  countryIndex?: number,
+};
+
+async function appPropsFetcher(): Promise<AppProps> {
+  console.log("app fetcher starting");
+  const url = CAN_MIGRATE_API + '/get-country-headers';
+  const countryRequest = await fetch(url, {
+    headers: { 'Content-Type': 'text/plain' },
+    method: 'GET'
+  });
+  const resp = await countryRequest.json();
+  console.log("app fetcher returning");
+  return { countryOptions: resp.countries };
+}
+
 const CanMigrateAppPage: React.FC = () => {
-  type AlertType = 'success' | 'danger' | 'warning';
-  type StateType = {
-    year: number,
-    countryOfOrigin: string,
-    canMoveMsg?: string,
-    yearMigrationDescription?: string,
-    alertType?: AlertType,
-    countryOptions?: string[],
-    countryIndex?: number,
-  };
-  const [state, setState] = useState<StateType>({ year: 1970, countryOfOrigin: "" });
+  const [data, setData] = useState<AppProps | undefined>(undefined);
+  if (data === undefined) {
+    appPropsFetcher().then(e => setData(e));
+  }
+  const [state, setState] = useState<BodyState>({ year: 1970, countryOfOrigin: "" });
   const headerDiv = (<div>
     <p>
       Since the founding of America, our immigration laws have changed many times. This
@@ -85,17 +106,7 @@ const CanMigrateAppPage: React.FC = () => {
       if today's immigration law had been set by the founders.
     </p>
   </div>);
-  if (state.countryOptions === undefined) {
-    const url = CAN_MIGRATE_API + '/get-country-headers';
-    console.log(url);
-    const countryRequest: Promise<Response> = fetch(url, {
-      headers: { 'Content-Type': 'text/plain' },
-      method: 'GET'
-    });
-    countryRequest.then((e: Response) => e.json()).then((e: { countries: string[] }) => {
-      setState({ ...state, countryOptions: e.countries });
-    });
-
+  if (data === undefined) {
     return <Container>
       <Row>
         {headerDiv}
@@ -170,7 +181,7 @@ const CanMigrateAppPage: React.FC = () => {
     return <div>
       {headerDiv}
       <Jumbotron style={{ height: "100%", width: "100%", alignContent: "middle" }}>
-        <CanMigrateForm options={state.countryOptions!} onSubmit={computeCanCome} />
+        <CanMigrateForm options={data!.countryOptions} onSubmit={computeCanCome} />
         {state.canMoveMsg ? <Alert variant={state.alertType}>{state.canMoveMsg}</Alert> : ""}
         {state.canMoveMsg ? <Alert variant="info">{state.yearMigrationDescription}</Alert> : ""}
       </Jumbotron>

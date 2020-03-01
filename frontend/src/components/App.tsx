@@ -42,44 +42,40 @@ const Footer: React.FC = () => {
 
 
 const App: React.FC = () => {
-  return (
-    <Router>
-      <body className="Site">
-        <header>
-          <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-            <Navbar.Brand href="/home">OpenJustice</Navbar.Brand>
-            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
-            <Navbar.Collapse id="responsive-navbar-nav">
-              <Nav className="mr-auto">
-                <Nav.Link href="/CanYouMigrate">
-                  Could You Migrate to America?
+  return <Router>
+      <header>
+        <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+          <Navbar.Brand href="/home">OpenJustice</Navbar.Brand>
+          <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+          <Navbar.Collapse id="responsive-navbar-nav">
+            <Nav className="mr-auto">
+              <Nav.Link href="/CanYouMigrate">
+                Could You Migrate to America?
               </Nav.Link>
               <Nav.Link href="/AboutOpenJustice">
                 About Open Justice
               </Nav.Link>
-              </Nav>
-            </Navbar.Collapse>
-          </Navbar>
-        </header>
-        <div className="Site-content">
-            <Switch>
-              <Route path="/CanYouMigrate">
-                <CanMigrateModule/>
-              </Route>
-              <Route path="/AboutOpenJustice">
-                <About />
-              </Route>
-              <Route path="">
-                <Redirect to="/CanYouMigrate"/>
-              </Route>
-            </Switch>
-        </div>
-        <footer>
-          <Footer></Footer>
-        </footer>
-      </body>
-    </Router>
-  );
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+      </header>
+      <div className="Site-content">
+        <Switch>
+          <Route path="/CanYouMigrate">
+            <CanMigrateModule />
+          </Route>
+          <Route path="/AboutOpenJustice">
+            <About />
+          </Route>
+          <Route path="">
+            <Redirect to="/CanYouMigrate" />
+          </Route>
+        </Switch>
+      </div>
+      <footer>
+        <Footer></Footer>
+      </footer>
+    </Router>;
 }
 
 export default App;

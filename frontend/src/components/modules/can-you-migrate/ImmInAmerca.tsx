@@ -43,7 +43,7 @@ const ImmInAmerica: React.FC = () => {
 
       Note that these three avenues are not guarantees. They only provide the means by which an individual may become a lawful
     permanent resident. <b> All </b> immigrants applying for a U.S. Visa are still vetted by the Department of Homeland
-          Security for key factors such as an existing criminal history and economic burden on the U.S. economy. ???
+          Security for key factors such as an existing criminal history and economic burden on the U.S. economy.
       </p>
     <h3>
       Country Quotas and the Diversity Program
