@@ -18,6 +18,7 @@ import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 import { Container, Row } from 'react-bootstrap';
 import CanMigrateModule from './modules/can-you-migrate/can-migrate-module';
+import PoliceProtestModule from './modules/police-protest-brutality/module';
 import About from './About';
 
 const Footer: React.FC = () => {
@@ -49,6 +50,9 @@ const App: React.FC = () => {
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="mr-auto">
+            <Nav.Link href="/PolicingProtest">
+                Policing Protests In America
+              </Nav.Link>
               <Nav.Link href="/CanYouMigrate">
                 Could You Migrate to America?
               </Nav.Link>
@@ -61,6 +65,9 @@ const App: React.FC = () => {
       </header>
       <div className="Site-content">
         <Switch>
+        <Route path="/PolicingProtest">
+            <PoliceProtestModule />
+          </Route>
           <Route path="/CanYouMigrate">
             <CanMigrateModule />
           </Route>

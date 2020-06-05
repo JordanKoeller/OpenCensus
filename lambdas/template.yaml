@@ -1,4 +1,3 @@
-AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: >
   CanYouMigrate
@@ -36,6 +35,26 @@ Resources:
             Path: /migration-history
             Method: get
 
+  PoliceBrutalityLambdaFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: police-app/
+      Handler: main.main
+      Runtime: python3.7
+      Events:
+        RequestVidsPage:
+          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+          Properties:
+            Path: /videos
+            Method: get
+  PoliceLinksTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      TableName: PoliceVideosLocations
+      PrimaryKey:
+        Name: City
+        Type: String
+
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
   # Find out more about other implicit resources you can reference within SAM
@@ -49,3 +68,6 @@ Outputs:
   CanYouMigrateLambdaFunctionIamRole:
     Description: "Implicit IAM Role created for Hello World function"
     Value: !GetAtt CanYouMigrateLambdaFunctionRole.Arn
+  PoliceLinksTable:
+    Description: "Police Brutality Table ARN"
+    Value: !GetAtt PoliceLinksTable.Arn
