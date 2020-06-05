@@ -75,7 +75,7 @@ const App: React.FC = () => {
             <About />
           </Route>
           <Route path="">
-            <Redirect to="/CanYouMigrate" />
+            <Redirect to="/PolicingProtest" />
           </Route>
         </Switch>
       </div>
