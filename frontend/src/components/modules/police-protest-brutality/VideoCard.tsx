@@ -20,7 +20,7 @@ export const VideoCard: React.FC<VideoCardProps> = ({ timestamp, tweetBody, twee
         return {
             autoplay: true,
             controls: true,
-            defaultVolume: 0.4,
+            muted: true,
             sources: [{ src: vidLink, type: 'video/mp4' }]
         };
     }, [vidLink]);
