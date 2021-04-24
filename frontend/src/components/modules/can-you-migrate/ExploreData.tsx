@@ -1,5 +1,5 @@
 import React, { useState, PureComponent } from 'react';
-import { Tooltip, Legend, Line, CartesianGrid, ResponsiveContainer, RechartsFunction, BarChart, XAxis, YAxis, Bar, Dot } from 'recharts';
+import { Tooltip, Legend, Line, CartesianGrid, ResponsiveContainer, BarChart, XAxis, YAxis, Bar, Dot } from 'recharts';
 import SelectZoomLineChart from '../../SelectZoomLineChart';
 import { Container, Col, Row, ButtonToolbar, Button } from 'react-bootstrap';
 import rgb, { CAN_MIGRATE_API } from '../../../utils';
@@ -133,7 +133,7 @@ const Plots: React.FC<ImmigrationPlotProps> = ({ plotData, columnHeaders }: Immi
     return <div></div>;
 
   }
-  const onMouseMove: RechartsFunction = (event?: { activeLabel: number }) => {
+  const onMouseMove = (event?: { activeLabel: number }) => {
     if (event && event.activeLabel) {
       setState({ ...state, focusYear: event.activeLabel });
     }

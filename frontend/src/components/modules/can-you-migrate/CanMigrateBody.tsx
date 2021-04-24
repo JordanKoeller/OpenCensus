@@ -23,11 +23,11 @@ type WaitTimeResponse = {
 
 const CanMigrateForm: React.FC<CanMigrateFormProps> = ({ options, onSubmit }) => {
   const [state, setState] = useState({ country: "", year: 1970 })
-  const handleSelectCountry = (event: React.FormEvent<FormControl & HTMLInputElement>) => {
+  const handleSelectCountry = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log(event.currentTarget.value);
     setState({ ...state, country: event.currentTarget.value })
   }
-  const handleSelectYear = (event: React.FormEvent<FormControl & HTMLInputElement>) => {
+  const handleSelectYear = (event: React.ChangeEvent<HTMLInputElement>) => {
     setState({ ...state, year: parseInt(event.currentTarget.value) });
   }
   const submissionFunction = () => {

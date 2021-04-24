@@ -37,16 +37,43 @@ def _respond(code, body):
 
 def handleRequestPage(event, context):
   client = boto3.client('dynamodb')
+  pageId = None
+  if "queryStringParameters" in event and event['queryStringParameters'] and 'pageId' in event['queryStringParameters']:
+    pageId = event["queryStringParameters"]["pageId"]
+  if pageId is not None:
+    dynamoResponse = client.scan(
+      TableName='PoliceVideosMemos',
+      Select='ALL_ATTRIBUTES',
+      FilterExpression='begins_with (id , :tweet)',
+      ExpressionAttributeValues={
+        ':tweet': {'S': 'tweet-'}
+      },
+      Limit=10,
+      ExclusiveStartKey={
+        'id': {
+            'S': pageId
+        }
+      }
+    )
+    items = mapDynamoDbResponse(dynamoResponse['Items'])
+    if 'LastEvaluatedKey' in dynamoResponse:
+      nextPg = dynamoResponse['LastEvaluatedKey']
+      return _respond(200, {'items': items, 'lastEvaluatedKey': nextPg})
+    return _respond(200, {'items': items})
   dynamoResponse = client.scan(
     TableName='PoliceVideosMemos',
     Select='ALL_ATTRIBUTES',
-    Limit=100,
+    Limit=10,
     FilterExpression='begins_with (id , :tweet)',
     ExpressionAttributeValues={
       ':tweet': {'S': 'tweet-'}
-    }
-  )['Items']
-  return _respond(200,mapDynamoDbResponse( dynamoResponse))
+    },
+  )
+  items = mapDynamoDbResponse(dynamoResponse['Items'])
+  if 'LastEvaluatedKey' in dynamoResponse:
+    nextPg = dynamoResponse['LastEvaluatedKey']
+    return _respond(200, {'items': items, 'lastEvaluatedKey': nextPg})
+  return _respond(200, {'items': items})
 
 def mapDynamoDbResponse(response):
   ret = []
@@ -84,7 +111,7 @@ def putInDynamoDb(body):
 def uploadToS3(url):
   """
   Downloads the video at the url, and uploads it to s3.
-  
+
   Returns the sha256 checksum as the video's ID.
   """
   vid = requests.get(url)

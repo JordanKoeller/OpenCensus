@@ -40,7 +40,7 @@ export default class VideoPlayer extends React.Component {
   render() {
     return (
       <div className="c-player">
-        <div className="c-player__screen" data-vjs-player="true" style={{width: 300, height: 300, margin: "auto"}}>
+        <div className="c-player__screen" data-vjs-player="true" style={{width: 780, height: 780, margin: "auto"}}>
           <video ref={(node: HTMLVideoElement) => this.videoNode = node} className="video-js"/>
         </div>
       </div>

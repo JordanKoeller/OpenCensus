@@ -16,16 +16,15 @@ const cleanTime: (timeString: string) => string = (timeString) => {
 
 export const VideoCard: React.FC<VideoCardProps> = ({ timestamp, tweetBody, tweetLink, vidLink }) => {
 
-    const videoOptions = useMemo(() => {
-        return {
-            autoplay: true,
+    const videoOptions = {
+            autoplay: false,
             controls: true,
             muted: true,
             sources: [{ src: vidLink, type: 'video/mp4' }]
-        };
-    }, [vidLink]);
+    };
+    console.log(timestamp, tweetBody, vidLink);
 
-    return <Card style={{ width: 320 }}>
+    return <Card style={{ width: 800 }}>
         <VideoPlayer {...videoOptions} />
         <Card.Body>
             <Card.Title>{cleanTime(timestamp)}</Card.Title>

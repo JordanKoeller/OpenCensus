@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Module from '../module-skeleton';
 import VideoMapComponent, { MarkerData } from './Map';
 
-import { CITIES } from './cities';
 import { VideoCard, VideoCardProps } from './VideoCard';
 import { CardGrid } from './CardGrid';
 
@@ -26,31 +25,31 @@ const PoliceProtestModule: React.FC = () => {
   //   {timestamp:"999", tweetBody:"Look at this graph", tweetLink:"https://google.com", vidLink:link},
   //   {timestamp:"999", tweetBody:"Look at this graph", tweetLink:"https://google.com", vidLink:link},
   // ];
-  const downloadUrl = 'https://x9lh5641m0.execute-api.us-east-1.amazonaws.com/Prod/videos';
-  const s3LinkPrefix = 'https://twitter-vids.s3.amazonaws.com/';
-  const [state, setState] = useState<VideoCardProps[]>([]);
-  if (state.length) {
-    console.log(state)
-    return <Module title="Police Responses to Protests"
-      AppComponent={<CardGrid cardProps={state} />}
-      MethodsComponent={<div />}
-      BackgroundInfoComponent={<div />}
-      ExploreDataComponent={<div />}
-      references={[]} />
-  } else {
-    fetch(downloadUrl, { method: 'GET' }).then(resp => resp.json()).then(js => {
-      return js.map((e: any) => {
-        const ret: VideoCardProps = {
-          vidLink: `${s3LinkPrefix}${e.TweetID}.mp4`,
-          tweetLink: e.TweetLink,
-          tweetBody: e.TweetBody,
-          timestamp: e.Timestamp
-        }
-        return ret
-      })
-    }).then((e: VideoCardProps[]) => setState(e));
-    return <h2> Loading...</h2>
-  }
+  // const downloadUrl = 'https://x9lh5641m0.execute-api.us-east-1.amazonaws.com/Prod/videos';
+  // const s3LinkPrefix = 'https://twitter-vids.s3.amazonaws.com/';
+  // const [state, setState] = useState<VideoCardProps[]>([]);
+  // // if (state.length) {
+  // // console.log(state)
+  return <Module title="Police Responses to Protests"
+    AppComponent={<CardGrid />}
+    MethodsComponent={<div />}
+    BackgroundInfoComponent={<div />}
+    ExploreDataComponent={<div />}
+    references={[]} />
+  // } else {
+  //   fetch(downloadUrl, { method: 'GET' }).then(resp => resp.json()).then(js => {
+  //     return js.map((e: any) => {
+  //       const ret: VideoCardProps = {
+  //         vidLink: `${s3LinkPrefix}${e.TweetID}.mp4`,
+  //         tweetLink: `https://${e.TweetLink}`,
+  //         tweetBody: e.TweetBody,
+  //         timestamp: e.Timestamp
+  //       }
+  //       return ret
+  //     })
+  //   }).then((e: VideoCardProps[]) => setState(e));
+  //   return <h2> Loading...</h2>
+  // }
 
 };
 
