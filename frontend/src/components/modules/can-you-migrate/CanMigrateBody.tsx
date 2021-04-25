@@ -96,8 +96,7 @@ const CanMigrateAppPage: React.FC = () => {
       under today's current immigration law? What if today's immigration law had been
       on the book for all of American history? This app analyzes historical census data
       to answer this question. Put in where your family moved from and what
-      year down below and you can find out. To give you a fighting chance, we will assume
-      your family passed the Department of Homeland Security's background checks.
+      year down below and you can find out.
         </p>
   </div>);
   const footerDiv = (<div>

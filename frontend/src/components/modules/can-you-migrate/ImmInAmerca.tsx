@@ -42,8 +42,7 @@ const ImmInAmerica: React.FC = () => {
     <p>
 
       Note that these three avenues are not guarantees. They only provide the means by which an individual may become a lawful
-    permanent resident. <b> All </b> immigrants applying for a U.S. Visa are still vetted by the Department of Homeland
-          Security for key factors such as an existing criminal history and economic burden on the U.S. economy.
+    permanent resident.
       </p>
     <h3>
       Country Quotas and the Diversity Program
@@ -60,7 +59,7 @@ const ImmInAmerica: React.FC = () => {
       under-represented countries from different regions across the globe. To be eligble for one of these visas, an immigrant must be coming from a country
       of origin that has contributed fewer than 50,000 immigrants to the united states over the past five years. Additionally, they must have a high school diploma
       or have worked for at least two years in a profession requiring two years of technical training in the past five years. Acceptance through this avenue is done
-      through a lottery system of the individauls meeting the requirements as well as the typical vetting process performed by the Department of Homeland Security.
+      through a lottery system.
   </p>
   </div>
 }
