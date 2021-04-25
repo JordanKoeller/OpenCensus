@@ -11,3 +11,7 @@ OpenJustice is an open-source project made from the contributions of many indivi
 # Contributing to OpenJustice
 
 Interested in contributing? Have an idea for something you think should be included in OpenJustice? See CONTRIBUTING.md for contributing guidelines.
+
+## Related Repositories
+Some code is hosted in other repositories that still needs to be merged in.
+  + ArchiveThisBLM Twitter Bot:  https://github.com/cstein1/twitter_movie_scraper/tree/develop
