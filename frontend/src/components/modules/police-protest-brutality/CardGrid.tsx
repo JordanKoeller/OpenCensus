@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
-import { Card, CardColumns } from 'react-bootstrap';
 import { VideoCard, VideoCardProps } from './VideoCard';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { json } from 'd3';
 import {
   useRouteMatch,
 } from 'react-router-dom';
-type CardGridProps = {
-  cardProps: VideoCardProps[]
-}
+
 
 type CardGridState = {
   vidList: VideoCardProps[],
@@ -39,7 +35,7 @@ export const CardGrid = () => {
         }
         return ret
       });
-      if (js.lastEvaluatedKey != undefined) {
+      if (js.lastEvaluatedKey !== undefined) {
         setState({
           vidList: [...vidList, ...newVidList],
           lastFetchedElem: js.lastEvaluatedKey.id.S,
@@ -58,7 +54,7 @@ export const CardGrid = () => {
   if (vidList.length === 0) {
     fetchMoreData();
   }
-  const { path, url } = useRouteMatch();
+  const { url } = useRouteMatch();
 
   return <React.Fragment>
     <p>
@@ -67,7 +63,8 @@ export const CardGrid = () => {
       were utilizing extremely violent and aggressive tactics to crack down on protestors.
         <br />
       <br />
-        In response to the protests and police departments' responses, a Twitter bot <a href="https://twitter.com/ArchiveThisBLM" target="_blank">
+        In response to the protests and police departments' responses, a Twitter bot
+        <a href="https://twitter.com/ArchiveThisBLM" target="_blank" rel="noopener noreferrer">
         @ArchiveThisBLM
       </a> was set up to capture videos of police performing acts of brutality against protesters.
       <br /> <br />

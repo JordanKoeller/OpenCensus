@@ -1,9 +1,11 @@
 import React, { useState, PureComponent } from 'react';
-import { Tooltip, Legend, Line, CartesianGrid, ResponsiveContainer, BarChart, XAxis, YAxis, Bar, Dot } from 'recharts';
+import {
+  Tooltip, Legend, Line, CartesianGrid,
+  ResponsiveContainer, BarChart, XAxis, YAxis, Bar
+} from 'recharts';
 import SelectZoomLineChart from '../../SelectZoomLineChart';
-import { Container, Col, Row, ButtonToolbar, Button } from 'react-bootstrap';
+import { Container, Row, Button } from 'react-bootstrap';
 import rgb, { CAN_MIGRATE_API } from '../../../utils';
-import { ButtonProps } from 'react-bootstrap';
 
 export type MigrationHistoryPlotDataType = {
   accepted: number[],
@@ -82,7 +84,7 @@ const NUM_COLORS = COLOR_CIRCLE.length;
 class CustomizedAxisTick extends PureComponent<any> {
   render() {
     const {
-      x, y, stroke, payload,
+      x, y, payload,
     } = this.props;
 
     return (
@@ -95,7 +97,7 @@ class CustomizedAxisTick extends PureComponent<any> {
 
 const CustomDot = (props: any) => {
   const {
-    cx, cy, stroke, payload, value,
+    cx, cy, stroke,
   } = props;
   if (props.index % 10 === 3) {
     return <circle cx={cx} cy={cy} r={3} fill={stroke} stroke="#fff" strokeWidth={1} />;
@@ -105,7 +107,7 @@ const CustomDot = (props: any) => {
 
 const CustomRect = (props: any) => {
   const {
-    cx, cy, stroke, payload, value,
+    cx, cy, stroke,
   } = props;
   if (props.index % 10 === 8) {
     const width = 6;
@@ -234,7 +236,7 @@ const Plots: React.FC<ImmigrationPlotProps> = ({ plotData, columnHeaders }: Immi
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="country" tick={<CustomizedAxisTick />} type="category" />
-          <YAxis/>
+          <YAxis />
           <Tooltip />
           <Bar dataKey="accepted" unit=" People" fill="#82ca9d" isAnimationActive={false} />
           <Bar dataKey="applied" unit=" people" fill="#8884d8" isAnimationActive={false} />
@@ -272,7 +274,7 @@ async function explorePropsFetcher(): Promise<ExploreDataProps> {
     };
     return ret;
   });
-  const headersData = await headersRequest.json() as {countries: string[]}
+  const headersData = await headersRequest.json() as { countries: string[] }
   console.log("explore fetcher returning");
   return { headers: headersData.countries, plotData: tableData }
 };

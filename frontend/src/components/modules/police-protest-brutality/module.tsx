@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Module from '../module-skeleton';
-import VideoMapComponent, { MarkerData } from './Map';
 
-import { VideoCard, VideoCardProps } from './VideoCard';
 import Methods from './Methods';
 import Background from './Background';
 import { CardGrid } from './CardGrid';
